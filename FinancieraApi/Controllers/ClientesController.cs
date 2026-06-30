@@ -16,5 +16,13 @@ namespace FinancieraApi.Controllers
         {
             _context = context; // inyeccion de dependencias
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        {
+            var clientes = await _context.Clientes.ToListAsync();
+            return Ok(clientes);
+        }
     }
+
 }

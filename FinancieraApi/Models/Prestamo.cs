@@ -10,8 +10,8 @@ namespace FinancieraApi.Models
         public int ClienteId    { get; set; }
         public decimal Monto { get; set; }
         public int PlazoMeses {  get; set; }
-        public decimal TasaIntereses { get; set; }
-        public DateTime FechaSolicitus {  get; set; }
+        public decimal TasaInteres { get; set; }
+        public DateTime FechaSolicitud {  get; set; }
         public string Estatus { get; set; }
         public Cliente? Cliente { get; set; }
 
