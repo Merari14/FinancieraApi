@@ -23,6 +23,19 @@ namespace FinancieraApi.Controllers
             var clientes = await _context.Clientes.ToListAsync();
             return Ok(clientes);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Cliente>> CrearCliente(Cliente cliente)
+        {
+            _context.Clientes.Add(cliente);
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetClientes),
+                new {id = cliente.Id}, 
+                cliente);
+        }
     }
 
 }
