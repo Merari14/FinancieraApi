@@ -2,6 +2,7 @@
 using FinancieraApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using FinancieraApi.Dtos.Cliente;
 
 
 namespace FinancieraApi.Controllers
@@ -23,16 +24,39 @@ namespace FinancieraApi.Controllers
             var clientes = await _context.Clientes.ToListAsync();
             return Ok(clientes);
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        {
+            var cliente = await _context.Clientes.
+                FirstOrDefaultAsync(c => c.Id == id);
+                
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            return Ok(cliente);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<Cliente>> CrearCliente(Cliente cliente)
+
+        public async Task<ActionResult<Cliente>> CrearCliente(ClienteCreateDto dto)
         {
+            var cliente = new Cliente
+            {
+                Nombre = dto.Nombre,
+                Apellido = dto.Apellido,
+                CURP = dto.CURP,
+                RFC = dto.RFC,
+                Telefono = dto.Telefono,
+                Correo = dto.Correo,
+                IngresoMensual = dto.IngresoMensual
+            };
             _context.Clientes.Add(cliente);
 
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(
-                nameof(GetClientes),
+                nameof(GetCliente),
                 new {id = cliente.Id}, 
                 cliente);
         }

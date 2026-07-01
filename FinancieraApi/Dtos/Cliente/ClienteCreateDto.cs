@@ -1,23 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FinancieraApi.Models
+namespace FinancieraApi.Dtos.Cliente
 {
-    public class Cliente
+    public class ClienteCreateDto
     {
-        public int Id { get; set; }
-
-
-        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [Required]
         [MaxLength(100)]
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = "El apellido es obligatorio")]
+        [Required]
         [MaxLength(100)]
         public string Apellido { get; set; }
 
         [Required]
         [MaxLength(18)]
-        public string CURP {  get; set; }
+        public string CURP { get; set; }
 
         [Required]
         [MaxLength(13)]
@@ -29,13 +26,7 @@ namespace FinancieraApi.Models
         [EmailAddress]
         public string Correo { get; set; }
 
-        [Range(1,99999)]
+        [Range(1, 999999)]
         public decimal IngresoMensual { get; set; }
-
-        //relacion uno a muchos
-
-        public ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();    
-
-
     }
 }
