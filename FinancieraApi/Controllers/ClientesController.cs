@@ -22,7 +22,19 @@ namespace FinancieraApi.Controllers
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
             var clientes = await _context.Clientes.ToListAsync();
-            return Ok(clientes);
+
+            var respuesta = clientes.Select(c => new ClienteResponseDto
+            {
+                Id = c.Id,
+                Nombre = c.Nombre,
+                Apellido = c.Apellido,
+                CURP = c.CURP,
+                RFC = c.RFC,
+                Telefono = c.Telefono,
+                Correo = c.Correo,
+                IngresoMensual = c.IngresoMensual
+            });
+            return Ok(respuesta);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(int id)
