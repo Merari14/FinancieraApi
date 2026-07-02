@@ -3,6 +3,7 @@ using FinancieraApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinancieraApi.Dtos.Cliente;
+using FinancieraApi.Dtos.Cliente;
 
 
 namespace FinancieraApi.Controllers
@@ -37,7 +38,7 @@ namespace FinancieraApi.Controllers
             return Ok(respuesta);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        public async Task<ActionResult<ClienteResponseDto>> GetCliente(int id)
         {
             var cliente = await _context.Clientes.
                 FirstOrDefaultAsync(c => c.Id == id);
@@ -46,7 +47,19 @@ namespace FinancieraApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(cliente);
+
+            var respuesta = new ClienteResponseDto
+            {
+                Id = cliente.Id,
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                CURP = cliente.CURP,
+                RFC = cliente.RFC,
+                Telefono = cliente.Telefono,
+                Correo = cliente.Correo,
+                IngresoMensual = cliente.IngresoMensual
+            };  
+            return Ok(respuesta);
         }
 
         [HttpPost]
