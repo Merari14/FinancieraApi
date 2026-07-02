@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinancieraApi.Dtos.Cliente;
 using FinancieraApi.Dtos.Cliente;
+using FinancieraApi.Interfaces;
 
 
 namespace FinancieraApi.Controllers
@@ -12,55 +13,33 @@ namespace FinancieraApi.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        private readonly FinancieraContext _context;
+        private readonly IClienteService _clienteService;
 
-        public ClientesController(FinancieraContext context)
+        public ClientesController(IClienteService clienteService)
         {
-            _context = context; // inyeccion de dependencias
+            _clienteService = clienteService; // inyeccion de dependencias
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        public async Task<ActionResult<List<IClienteService>>> GetClientes()
         {
-            var clientes = await _context.Clientes.ToListAsync();
+            var clientes = await _clienteService.ObtenerClientesAsync();
 
-            var respuesta = clientes.Select(c => new ClienteResponseDto
-            {
-                Id = c.Id,
-                Nombre = c.Nombre,
-                Apellido = c.Apellido,
-                CURP = c.CURP,
-                RFC = c.RFC,
-                Telefono = c.Telefono,
-                Correo = c.Correo,
-                IngresoMensual = c.IngresoMensual
-            });
-            return Ok(respuesta);
+            return Ok(clientes);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<ClienteResponseDto>> GetCliente(int id)
         {
-            var cliente = await _context.Clientes.
-                FirstOrDefaultAsync(c => c.Id == id);
-                
+            var cliente = await _clienteService.ObtenerClientePorIdAsync(id);
+
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            var respuesta = new ClienteResponseDto
-            {
-                Id = cliente.Id,
-                Nombre = cliente.Nombre,
-                Apellido = cliente.Apellido,
-                CURP = cliente.CURP,
-                RFC = cliente.RFC,
-                Telefono = cliente.Telefono,
-                Correo = cliente.Correo,
-                IngresoMensual = cliente.IngresoMensual
-            };  
-            return Ok(respuesta);
-        }
+            return Ok(cliente);
+        }   
+
 
         [HttpPost]
 
